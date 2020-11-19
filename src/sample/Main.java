@@ -159,18 +159,40 @@ public class Main extends Application {
     private static void startGame() {
         class Refresh extends TimerTask {
             public void run() {
+                List<Rectangle> cellsToRemove = new ArrayList<>();
+                List<Rectangle> cellsToAdd = new ArrayList<>();
+
                 cells.forEach(cell -> {
-                    System.out.println(countCellsAround(cell));
+                    System.out.println(cell.getX() + "/" + cell.getY() + "     " + countCellsAround(cell));
                     if (countCellsAround(cell) == 3) {
-                        paintCell(cell.getX(),cell.getY());
-                        g.setFill(Color.web("green"));
-                        g.fillRect(cell.getX(),cell.getY(),CELL_SIZE,CELL_SIZE);
-                        g.setFill(Color.web("black"));
+                        cellsToAdd.add(cell);
+//                        paintCell(cell.getX(),cell.getY());
                     }
                     else if (countCellsAround(cell) < 2 || countCellsAround(cell) > 3) {
-                        removeCell(cell.getX(),cell.getY());
+                        cellsToRemove.add(cell);
+//                        removeCell(cell.getX(),cell.getY());
                     }
                 });
+
+                cellsToRemove.forEach(cellToRemove -> {
+                    removeCell(cellToRemove.getX(),cellToRemove.getY());
+                });
+
+                cellsToAdd.forEach(cellToAdd -> {
+                    paintCell(cellToAdd.getX(),cellToAdd.getY());
+                });
+//                cells.forEach(cell -> {
+//                    System.out.println(countCellsAround(cell));
+//                    if (countCellsAround(cell) == 3) {
+//                        paintCell(cell.getX(),cell.getY());
+//                        g.setFill(Color.web("green"));
+//                        g.fillRect(cell.getX(),cell.getY(),CELL_SIZE,CELL_SIZE);
+//                        g.setFill(Color.web("black"));
+//                    }
+//                    else if (countCellsAround(cell) < 2 || countCellsAround(cell) > 3) {
+//                        removeCell(cell.getX(),cell.getY());
+//                    }
+//                });
             }
         }
         Timer timer = new Timer();
